@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Content Scheduler - Interactive Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 40px;
+            max-width: 900px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .tab-button:hover,
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin: 8px 0;
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <div class="glass-container">
+            <div class="logo text-4xl font-bold mb-4 pulse">🚀 AI Content Scheduler</div>
+            <h1 class="text-3xl font-bold mb-6">Your AI-Powered Content Creation Platform</h1>
+
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap justify-center mb-8">
+                <button class="tab-button active" onclick="showTab('generator')">🚀 Content Generator</button>
+                <button class="tab-button" onclick="showTab('optimizer')">🎯 Post Optimizer</button>
+                <button class="tab-button" onclick="showTab('coach')">🤖 AI Coach</button>
+                <button class="tab-button" onclick="showTab('pricing')">💎 Pricing</button>
+            </div>
+
+            <!-- Content Generator Tab -->
+            <div id="generator" class="tab-content active">
+                <h2 class="text-2xl font-bold mb-6">Generate Your Content Plan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <input type="text" class="form-input" placeholder="Creator Type (e.g., Influencer, Business)" id="creatorType">
+                        <input type="text" class="form-input" placeholder="Niche (e.g., fitness, tech, fashion)" id="niche">
+                        <input type="text" class="form-input" placeholder="Target Audience" id="audience">
+                        <select class="form-input" id="platform">
+                            <option value="TikTok">TikTok</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Twitter">Twitter</option>
+                        </select>
+                        <button class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-3 px-6 rounded-lg mt-4 hover:scale-105 transition-transform" onclick="generateContent()">
+                            Generate Content Plan 🚀
+                        </button>
+                    </div>
+                    <div id="generatorResults" class="text-left">
+                        <p class="text-blue-200">Fill out the form and click "Generate Content Plan" to see your AI-powered content strategy!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post Optimizer Tab -->
+            <div id="optimizer" class="tab-content">
+                <h2 class="text-2xl font-bold mb-6">Optimize Your Post for Virality</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <textarea class="form-input h-32" placeholder="Paste your caption or post here..." id="postText"></textarea>
+                        <button class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-3 px-6 rounded-lg mt-4 hover:scale-105 transition-transform" onclick="optimizePost()">
+                            Analyze for Virality 🎯
+                        </button>
+                    </div>
+                    <div id="optimizerResults" class="text-left">
+                        <p class="text-blue-200">Paste your content and click "Analyze for Virality" to get detailed insights!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Coach Tab -->
+            <div id="coach" class="tab-content">
+                <h2 class="text-2xl font-bold mb-6">Chat with Your AI Content Coach</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="result-card mb-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">AI</span>
+                                </div>
+                                <span class="font-bold">AI Coach</span>
+                            </div>
+                            <p>Hi! I'm your AI Content Coach. Ask me anything about content strategy, viral tips, or optimization advice!</p>
+                        </div>
+                        <input type="text" class="form-input" placeholder="Ask your AI coach anything..." id="coachQuestion">
+                        <button class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold py-3 px-6 rounded-lg mt-4 hover:scale-105 transition-transform" onclick="askCoach()">
+                            Send Message 🤖
+                        </button>
+                    </div>
+                    <div id="coachResults" class="text-left">
+                        <p class="text-blue-200">Ask me questions like:</p>
+                        <ul class="text-blue-200 text-sm mt-2 space-y-1">
+                            <li>• "How can I increase my engagement?"</li>
+                            <li>• "What trends should I follow?"</li>
+                            <li>• "How do I create viral content?"</li>
+                            <li>• "Help me optimize my posting schedule"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Tab -->
+            <div id="pricing" class="tab-content">
+                <h2 class="text-2xl font-bold mb-6">Choose Your Plan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="feature-card">
+                        <h3 class="text-xl font-bold mb-2">Free</h3>
+                        <div class="text-3xl font-bold mb-4">$0<span class="text-sm">/month</span></div>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>✓ 5 AI generations per day</li>
+                            <li>✓ Basic content templates</li>
+                            <li>✓ Standard hashtags</li>
+                            <li>✓ Community support</li>
+                        </ul>
+                        <button class="w-full bg-white/20 text-white py-2 px-4 rounded-lg">Get Started Free</button>
+                    </div>
+                    <div class="feature-card border-pink-500/50 ring-2 ring-pink-500/20">
+                        <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-bold mb-2 inline-block">Most Popular</div>
+                        <h3 class="text-xl font-bold mb-2">Pro</h3>
+                        <div class="text-3xl font-bold mb-4">$29<span class="text-sm">/month</span></div>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>✓ Unlimited AI generations</li>
+                            <li>✓ Advanced content templates</li>
+                            <li>✓ Trend analysis</li>
+                            <li>✓ Video generation</li>
+                            <li>✓ Analytics dashboard</li>
+                            <li>✓ Priority support</li>
+                        </ul>
+                        <button class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg">Subscribe to Pro</button>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="text-xl font-bold mb-2">Elite</h3>
+                        <div class="text-3xl font-bold mb-4">$99<span class="text-sm">/month</span></div>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>✓ Everything in Pro</li>
+                            <li>✓ Custom AI models</li>
+                            <li>✓ White-label options</li>
+                            <li>✓ API access</li>
+                            <li>✓ Dedicated support</li>
+                            <li>✓ Custom integrations</li>
+                        </ul>
+                        <button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg">Subscribe to Elite</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function generateContent() {
+            const creatorType = document.getElementById('creatorType').value || 'Influencer';
+            const niche = document.getElementById('niche').value || 'lifestyle';
+            const audience = document.getElementById('audience').value || 'Gen Z and Millennials';
+            const platform = document.getElementById('platform').value;
+
+            const results = document.getElementById('generatorResults');
+            results.innerHTML = `
+                <div class="result-card">
+                    <h3 class="font-bold text-lg mb-3">🎯 Generated Content Plan</h3>
+                    <p class="text-sm mb-2"><strong>Creator Type:</strong> ${creatorType}</p>
+                    <p class="text-sm mb-2"><strong>Niche:</strong> ${niche}</p>
+                    <p class="text-sm mb-2"><strong>Platform:</strong> ${platform}</p>
+                    <p class="text-sm mb-2"><strong>Target Audience:</strong> ${audience}</p>
+                    <div class="mt-4">
+                        <h4 class="font-bold mb-2">📅 7-Day Content Schedule:</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 1:</strong> ${niche} transformation story with before/after
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 2:</strong> Trending ${niche} challenge or hack
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 3:</strong> Behind-the-scenes ${niche} content
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 4:</strong> Educational ${niche} tips and tricks
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 5:</strong> User-generated content showcase
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 6:</strong> ${niche} trend reaction video
+                            </div>
+                            <div class="bg-white/10 p-2 rounded">
+                                <strong>Day 7:</strong> Weekly recap and community engagement
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-green-500/20 rounded">
+                            <p class="text-green-300 text-sm"><strong>Viral Score:</strong> 85/100</p>
+                            <p class="text-green-300 text-sm"><strong>Predicted Engagement:</strong> High</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function optimizePost() {
+            const postText = document.getElementById('postText').value;
+            if (!postText.trim()) {
+                alert('Please enter some content to analyze!');
+                return;
+            }
+
+            const results = document.getElementById('optimizerResults');
+            const words = postText.split(' ').length;
+            const hashtags = (postText.match(/#\w+/g) || []).length;
+            const questions = (postText.match(/\?/g) || []).length;
+
+            let score = 50;
+            let factors = [];
+
+            if (words >= 10 && words <= 30) {
+                score += 20;
+                factors.push('✓ Good length');
+            } else {
+                factors.push('⚠️ Consider adjusting length');
+            }
+
+            if (hashtags >= 3 && hashtags <= 8) {
+                score += 15;
+                factors.push('✓ Good hashtag count');
+            } else {
+                factors.push('⚠️ Add 3-8 hashtags');
+            }
+
+            if (questions > 0) {
+                score += 10;
+                factors.push('✓ Good engagement hooks');
+            } else {
+                factors.push('⚠️ Add questions for engagement');
+            }
+
+            if (postText.length < 100) {
+                score += 5;
+                factors.push('✓ Concise and scannable');
+            }
+
+            const color = score >= 80 ? 'text-green-400' : score >= 60 ? 'text-yellow-400' : 'text-red-400';
+            const bgColor = score >= 80 ? 'bg-green-500/20' : score >= 60 ? 'bg-yellow-500/20' : 'bg-red-500/20';
+
+            results.innerHTML = `
+                <div class="result-card">
+                    <h3 class="font-bold text-lg mb-3">🎯 Viral Analysis Results</h3>
+                    <div class="text-center mb-4">
+                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full ${bgColor} border-4 border-white/30">
+                            <span class="text-2xl font-bold ${color}">${score}</span>
+                        </div>
+                        <p class="text-sm mt-2">Viral Score</p>
+                    </div>
+                    <div class="space-y-2">
+                        <h4 class="font-bold">Analysis Factors:</h4>
+                        ${factors.map(factor => `<p class="text-sm">${factor}</p>`).join('')}
+                    </div>
+                    <div class="mt-4 p-3 bg-white/10 rounded">
+                        <h4 class="font-bold mb-2">💡 Improved Version:</h4>
+                        <p class="text-sm">${generateImprovedVersion(postText)}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateImprovedVersion(text) {
+            let improved = text;
+            if (!improved.startsWith('POV:') && !improved.startsWith('Did you know')) {
+                improved = `POV: ${improved}`;
+            }
+            if (!improved.includes('?')) {
+                improved += ' What do you think?';
+            }
+            if ((improved.match(/#\w+/g) || []).length < 3) {
+                improved += ' #viral #fyp #trending';
+            }
+            return improved;
+        }
+
+        function askCoach() {
+            const question = document.getElementById('coachQuestion').value;
+            if (!question.trim()) {
+                alert('Please ask a question!');
+                return;
+            }
+            
+            const results = document.getElementById('coachResults');
+            const responses = [
+                `Great question! For viral content, try these strategies: 1) Hook viewers in the first 3 seconds, 2) Use trending sounds and hashtags, 3) Create emotional connections, 4) Post at optimal times.`,
+                `Your engagement can be improved by: Asking questions in captions, using interactive elements like polls, responding to comments quickly, and creating shareable content.`,
+                `For your posting schedule, I recommend: TikTok at 6-9 PM, Instagram at 11 AM-1 PM, YouTube at 2-4 PM. These are peak engagement times for your audience.`,
+                `Content optimization tip: Focus on creating authentic, value-driven content that resonates with your target audience. Quality over quantity!`,
+                `Trend analysis shows that your niche content is performing well. Consider incorporating trending topics and sounds into your next content plan.`
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            
+            results.innerHTML = `
+                <div class="result-card">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">AI</span>
+                        </div>
+                        <span class="font-bold">AI Coach Response</span>
+                    </div>
+                    <p class="text-sm mb-3"><strong>Your question:</strong> "${question}"</p>
+                    <p class="text-sm">${randomResponse}</p>
+                    <div class="mt-4 space-y-1">
+                        <button class="block w-full text-left text-xs bg-white/20 hover:bg-white/30 rounded-lg px-2 py-1 transition-colors" onclick="askFollowUp('Tell me more about this')">Tell me more about this</button>
+                        <button class="block w-full text-left text-xs bg-white/20 hover:bg-white/30 rounded-lg px-2 py-1 transition-colors" onclick="askFollowUp('What about other platforms?')">What about other platforms?</button>
+                        <button class="block w-full text-left text-xs bg-white/20 hover:bg-white/30 rounded-lg px-2 py-1 transition-colors" onclick="askFollowUp('How can I measure success?')">How can I measure success?</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function askFollowUp(question) {
+            document.getElementById('coachQuestion').value = question;
+            askCoach();
+        }
+    </script>
+</body>
+
+</html>

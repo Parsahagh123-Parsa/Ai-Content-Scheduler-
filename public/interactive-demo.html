@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Content Scheduler - Interactive Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/@react-three/fiber@8.15.12/dist/index.umd.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .neural-pulse {
+            animation: neuralPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes neuralPulse {
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .button-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .button-glow:hover::before {
+            left: 100%;
+        }
+        
+        .xp-bar {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            border-radius: 10px;
+            height: 8px;
+            transition: width 0.5s ease;
+        }
+        
+        .ai-thinking {
+            animation: thinking 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes thinking {
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 overflow-x-hidden">
+    <!-- Header -->
+    <header class="p-6 shadow-lg">
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-bold gradient-text">
+                🚀 AI Content Scheduler
+            </h1>
+            <div class="flex space-x-4">
+                <button class="px-6 py-3 glass rounded-full text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300 button-glow">
+                    💎 Upgrade to Pro
+                </button>
+                <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-yellow-500 rounded-full text-white font-semibold hover:scale-105 transition-all duration-300 button-glow">
+                    🎯 Get Started
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="p-8">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-6xl font-bold text-white mb-6 floating">
+                Welcome to the Future of Content Creation! ✨
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Your AI-powered content creation platform with real-time trends, smart optimization, and automated scheduling.
+            </p>
+        </section>
+
+        <!-- Interactive Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Content Generator -->
+            <div class="glass rounded-3xl p-8 card-hover">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-2xl mr-4">
+                        🤖
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">AI Content Generator</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">Creator Type</label>
+                        <select id="creatorType" class="w-full p-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white">
+                            <option value="fitness">Fitness Influencer</option>
+                            <option value="tech">Tech Reviewer</option>
+                            <option value="fashion">Fashion Blogger</option>
+                            <option value="food">Food Creator</option>
+                            <option value="travel">Travel Vlogger</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-300 mb-2">Platform</label>
+                        <select id="platform" class="w-full p-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white">
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube Shorts</option>
+                            <option value="instagram">Instagram Reels</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-300 mb-2">Content Goal</label>
+                        <input type="text" id="contentGoal" placeholder="e.g., Increase engagement by 50%" class="w-full p-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400">
+                    </div>
+
+                    <button onclick="generateContent()" class="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg text-white font-semibold hover:scale-105 transition-all duration-300 button-glow">
+                        <span id="generateText">🚀 Generate 7-Day Plan</span>
+                        <div id="aiThinking" class="hidden ai-thinking">🤖 AI is thinking...</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Smart Optimizer -->
+            <div class="glass rounded-3xl p-8 card-hover">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-2xl mr-4">
+                        🎯
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Smart Post Optimizer</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-300 mb-2">Your Caption</label>
+                        <textarea id="captionInput" rows="4" placeholder="Paste your caption here for AI optimization..." class="w-full p-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400 resize-none"></textarea>
+                    </div>
+
+                    <button onclick="optimizeCaption()" class="w-full py-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg text-white font-semibold hover:scale-105 transition-all duration-300 button-glow">
+                        <span id="optimizeText">🎯 Optimize for Virality</span>
+                        <div id="optimizeThinking" class="hidden ai-thinking">🤖 Analyzing viral potential...</div>
+                    </button>
+
+                    <div id="viralityScore" class="hidden">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-300">Virality Score</span>
+                            <span id="scoreValue" class="text-2xl font-bold text-white">0/100</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-3">
+                            <div id="scoreBar" class="xp-bar h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Coaching Chat -->
+        <div class="glass rounded-3xl p-8 mb-12 card-hover">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-2xl mr-4">
+                    💬
+                </div>
+                <h3 class="text-2xl font-bold text-white">AI Coaching Chat</h3>
+            </div>
+
+            <div id="chatContainer" class="h-64 overflow-y-auto mb-4 p-4 bg-black bg-opacity-20 rounded-lg">
+                <div class="space-y-4">
+                    <div class="flex justify-end">
+                        <div class="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-3 rounded-lg max-w-xs">
+                            How can I make my content more engaging?
+                        </div>
+                    </div>
+                    <div class="flex justify-start">
+                        <div class="bg-white bg-opacity-10 text-white p-3 rounded-lg max-w-xs">
+                            Great question! Here are some tips:<br> • Use trending sounds and hashtags<br> • Create hooks in the first 3 seconds<br> • Ask questions to encourage comments<br> • Post at optimal times for your audience
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-4">
+                <input type="text" id="chatInput" placeholder="Ask your AI coach anything..." class="flex-1 p-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400">
+                <button onclick="sendMessage()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg text-white font-semibold hover:scale-105 transition-all duration-300 button-glow">
+                    Send
+                </button>
+            </div>
+        </div>
+
+        <!-- Creator XP System -->
+        <div class="glass rounded-3xl p-8 mb-12 card-hover">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-2xl mr-4">
+                        ⭐
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Creator XP System</h3>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-white">Level 5</div>
+                    <div class="text-gray-300">Platinum Creator</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-300">Experience Points</span>
+                    <span class="text-white font-semibold">2,450 / 3,000 XP</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-4">
+                    <div class="xp-bar h-4 rounded-full" style="width: 82%"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="text-2xl mb-2">🏆</div>
+                    <div class="text-white font-semibold">12</div>
+                    <div class="text-gray-300 text-sm">Achievements</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl mb-2">🔥</div>
+                    <div class="text-white font-semibold">7</div>
+                    <div class="text-gray-300 text-sm">Day Streak</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl mb-2">📈</div>
+                    <div class="text-white font-semibold">+25%</div>
+                    <div class="text-gray-300 text-sm">Engagement</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl mb-2">💎</div>
+                    <div class="text-white font-semibold">Pro</div>
+                    <div class="text-gray-300 text-sm">Status</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Dashboard Preview -->
+        <div class="glass rounded-3xl p-8 mb-12 card-hover">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-2xl mr-4">
+                    🌌
+                </div>
+                <h3 class="text-2xl font-bold text-white">3D Dashboard</h3>
+            </div>
+
+            <div class="relative h-64 bg-gradient-to-br from-purple-800 to-blue-800 rounded-lg overflow-hidden">
+                <div id="threeContainer" class="w-full h-full"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <div class="text-4xl mb-4 floating">🎯</div>
+                        <div class="text-xl font-semibold">Interactive 3D Content Calendar</div>
+                        <div class="text-gray-300">Hover and click to explore your content universe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">🎥</div>
+                <h4 class="text-xl font-bold text-white mb-2">AI Video Generation</h4>
+                <p class="text-gray-300">Generate videos with RunwayML and Pika API integration</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">🎵</div>
+                <h4 class="text-xl font-bold text-white mb-2">Voice & Music</h4>
+                <p class="text-gray-300">Text-to-speech with ElevenLabs and background music generation</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">📊</div>
+                <h4 class="text-xl font-bold text-white mb-2">Analytics</h4>
+                <p class="text-gray-300">Real-time performance tracking and insights</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">🤝</div>
+                <h4 class="text-xl font-bold text-white mb-2">Collaboration</h4>
+                <p class="text-gray-300">Team workspaces and real-time co-creation</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">💰</div>
+                <h4 class="text-xl font-bold text-white mb-2">Monetization</h4>
+                <p class="text-gray-300">Stripe integration and revenue sharing</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="text-3xl mb-4">🌍</div>
+                <h4 class="text-xl font-bold text-white mb-2">Multi-Platform</h4>
+                <p class="text-gray-300">TikTok, YouTube, Instagram, and more</p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">Ready to Transform Your Content?</h2>
+            <p class="text-xl text-gray-300 mb-8">Join thousands of creators using AI to grow their audience</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white font-bold text-lg hover:scale-105 transition-all duration-300 button-glow">
+                    🚀 Start Free Trial
+                </button>
+                <button class="px-8 py-4 glass rounded-full text-white font-bold text-lg hover:bg-white hover:bg-opacity-20 transition-all duration-300 button-glow">
+                    📞 Book Demo
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-8 text-center text-gray-300">
+        <p>&copy; 2024 AI Content Scheduler. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Interactive functionality
+        function generateContent() {
+            const generateBtn = document.getElementById('generateText');
+            const aiThinking = document.getElementById('aiThinking');
+            const creatorType = document.getElementById('creatorType').value;
+            const platform = document.getElementById('platform').value;
+            const contentGoal = document.getElementById('contentGoal').value;
+
+            generateBtn.classList.add('hidden');
+            aiThinking.classList.remove('hidden');
+
+            // Simulate AI generation
+            setTimeout(() => {
+                aiThinking.classList.add('hidden');
+                generateBtn.classList.remove('hidden');
+
+                // Show generated content
+                alert(`🎉 Generated 7-day content plan for ${creatorType} on ${platform}!\n\nGoal: ${contentGoal || 'General engagement'}\n\n✅ 7 viral video ideas\n✅ Optimized captions\n✅ Trending hashtags\n✅ Best posting times\n✅ Thumbnail concepts`);
+            }, 3000);
+        }
+
+        function optimizeCaption() {
+            const optimizeBtn = document.getElementById('optimizeText');
+            const optimizeThinking = document.getElementById('optimizeThinking');
+            const captionInput = document.getElementById('captionInput').value;
+            const viralityScore = document.getElementById('viralityScore');
+            const scoreValue = document.getElementById('scoreValue');
+            const scoreBar = document.getElementById('scoreBar');
+
+            if (!captionInput.trim()) {
+                alert('Please enter a caption to optimize!');
+                return;
+            }
+
+            optimizeBtn.classList.add('hidden');
+            optimizeThinking.classList.remove('hidden');
+
+            setTimeout(() => {
+                optimizeThinking.classList.add('hidden');
+                optimizeBtn.classList.remove('hidden');
+                viralityScore.classList.remove('hidden');
+
+                // Generate random score between 60-95
+                const score = Math.floor(Math.random() * 36) + 60;
+                scoreValue.textContent = `${score}/100`;
+                scoreBar.style.width = `${score}%`;
+
+                // Add score color based on value
+                if (score >= 80) {
+                    scoreBar.style.background = 'linear-gradient(90deg, #4ecdc4, #45b7d1)';
+                } else if (score >= 70) {
+                    scoreBar.style.background = 'linear-gradient(90deg, #feca57, #ff9ff3)';
+                } else {
+                    scoreBar.style.background = 'linear-gradient(90deg, #ff6b6b, #ee5a24)';
+                }
+            }, 2000);
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const message = chatInput.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'flex justify-end mb-4';
+            userMessage.innerHTML = `
+                <div class="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-3 rounded-lg max-w-xs">
+                    ${message}
+                </div>
+            `;
+            chatContainer.appendChild(userMessage);
+
+            // Clear input
+            chatInput.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'flex justify-start mb-4';
+                aiMessage.innerHTML = `
+                    <div class="bg-white bg-opacity-10 text-white p-3 rounded-lg max-w-xs">
+                        Great question! Based on your content, I recommend focusing on trending topics and engaging hooks. Would you like me to analyze your recent posts for specific suggestions?
+                    </div>
+                `;
+                chatContainer.appendChild(aiMessage);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+        }
+
+        // Enter key support for chat
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize 3D scene (simplified)
+        function init3D() {
+            const container = document.getElementById('threeContainer');
+            if (!container) return;
+
+            // Simple 3D effect with CSS transforms
+            container.style.background = 'radial-gradient(circle at 30% 20%, rgba(255, 107, 107, 0.3) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(78, 205, 196, 0.3) 0%, transparent 50%)';
+            container.style.animation = 'floating 4s ease-in-out infinite';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            init3D();
+
+            // Add some interactive effects
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+
+        // Add some dynamic effects
+        setInterval(() => {
+            const elements = document.querySelectorAll('.neural-pulse');
+            elements.forEach(el => {
+                el.style.opacity = Math.random() * 0.5 + 0.3;
+            });
+        }, 2000);
+    </script>
+</body>
+
+</html>
