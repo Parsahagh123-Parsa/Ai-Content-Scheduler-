@@ -1,27 +1,20 @@
 {
-    "name": "server",
-    "version": "1.0.0",
-    "description": "Express TypeScript server for 21-day roadmap",
-    "main": "dist/server.js",
-    "scripts": {
-        "build": "tsc",
-        "start": "node dist/server.js",
-        "dev": "nodemon src/server.ts",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": ["express", "typescript", "api"],
-    "author": "Parsa",
-    "license": "ISC",
-    "dependencies": {
-        "cors": "^2.8.5",
-        "express": "^4.18.2"
-    },
-    "devDependencies": {
-        "@types/cors": "^2.8.17",
-        "@types/express": "^4.17.21",
-        "@types/node": "^20.10.5",
-        "nodemon": "^3.0.2",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.3.3"
-    }
+  "name": "server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.2",
+    "nodemailer": "^7.0.10"
+  }
 }
