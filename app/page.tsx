@@ -24,10 +24,11 @@ import ContentLibrary from '../components/ContentLibrary';
 import AdvancedScheduler from '../components/AdvancedScheduler';
 import HelpCenter from '../components/HelpCenter';
 import ExportImport from '../components/ExportImport';
+import AdvancedSearch from '../components/AdvancedSearch';
 
 // Define the type for tab navigation - this ensures type safety
 // Each tab represents a different feature/section of the app
-type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'library' | 'scheduler' | 'help' | 'export' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
+type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'library' | 'scheduler' | 'help' | 'export' | 'search' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
 
 /**
  * Main Home Component - The central hub of the AI Content Scheduler application
@@ -62,7 +63,8 @@ export default function Home() {
     { id: 'library', label: 'Library', icon: '📚' },                  // Content library & asset management
     { id: 'scheduler', label: 'Advanced Scheduler', icon: '⏰' },    // Recurring posts & bulk operations (NEW)
     { id: 'help', label: 'Help Center', icon: '❓' },                 // Knowledge base & tutorials
-    { id: 'export', label: 'Export/Import', icon: '💾' },             // Data backup & restore (NEW)
+    { id: 'export', label: 'Export/Import', icon: '💾' },             // Data backup & restore
+    { id: 'search', label: 'Search', icon: '🔍' },                    // Advanced search across all content (NEW)
     { id: 'coach', label: 'AI Coach', icon: '🤖' },                  // AI coaching and guidance
     { id: 'dashboard', label: '3D Dashboard', icon: '🌌' },          // 3D visualization dashboard
     { id: 'comprehensive', label: 'AI Studio', icon: '🎬' },         // Comprehensive content creation suite
@@ -111,6 +113,9 @@ export default function Home() {
       case 'export':
         // Export and import functionality
         return <ExportImport />;
+      case 'search':
+        // Advanced search functionality
+        return <AdvancedSearch />;
       case 'coach':
         // AI coaching chat interface for guidance
         return <AICoachingChat />;
