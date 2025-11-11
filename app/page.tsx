@@ -21,10 +21,12 @@ import SimplePostingWorkflow from '../components/SimplePostingWorkflow';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import TeamWorkspace from '../components/TeamWorkspace';
 import ContentLibrary from '../components/ContentLibrary';
+import AdvancedScheduler from '../components/AdvancedScheduler';
+import HelpCenter from '../components/HelpCenter';
 
 // Define the type for tab navigation - this ensures type safety
 // Each tab represents a different feature/section of the app
-type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'library' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
+type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'library' | 'scheduler' | 'help' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
 
 /**
  * Main Home Component - The central hub of the AI Content Scheduler application
@@ -56,7 +58,9 @@ export default function Home() {
     { id: 'optimizer', label: 'Post Optimizer', icon: '🎯' },        // Post performance optimization
     { id: 'analytics', label: 'Analytics', icon: '📊' },             // Advanced analytics dashboard
     { id: 'team', label: 'Team', icon: '👥' },                       // Team workspace & collaboration
-    { id: 'library', label: 'Library', icon: '📚' },                  // Content library & asset management (NEW)
+    { id: 'library', label: 'Library', icon: '📚' },                  // Content library & asset management
+    { id: 'scheduler', label: 'Advanced Scheduler', icon: '⏰' },    // Recurring posts & bulk operations (NEW)
+    { id: 'help', label: 'Help Center', icon: '❓' },                 // Knowledge base & tutorials (NEW)
     { id: 'coach', label: 'AI Coach', icon: '🤖' },                  // AI coaching and guidance
     { id: 'dashboard', label: '3D Dashboard', icon: '🌌' },          // 3D visualization dashboard
     { id: 'comprehensive', label: 'AI Studio', icon: '🎬' },         // Comprehensive content creation suite
@@ -96,6 +100,12 @@ export default function Home() {
       case 'library':
         // Content library with asset management
         return <ContentLibrary />;
+      case 'scheduler':
+        // Advanced scheduler with recurring posts
+        return <AdvancedScheduler />;
+      case 'help':
+        // Help center with knowledge base
+        return <HelpCenter />;
       case 'coach':
         // AI coaching chat interface for guidance
         return <AICoachingChat />;
