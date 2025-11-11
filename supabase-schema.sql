@@ -1085,6 +1085,29 @@ CREATE INDEX IF NOT EXISTS idx_scheduled_posts_status ON scheduled_posts(status)
 CREATE INDEX IF NOT EXISTS idx_scheduled_posts_scheduled_time ON scheduled_posts(scheduled_time);
 CREATE INDEX IF NOT EXISTS idx_scheduled_posts_created_at ON scheduled_posts(created_at DESC);
 
+-- Content assets table for content library
+CREATE TABLE IF NOT EXISTS content_assets (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  type VARCHAR(50) NOT NULL CHECK (type IN ('image', 'video', 'document', 'template')),
+  url TEXT NOT NULL,
+  thumbnail TEXT,
+  size BIGINT NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  folder VARCHAR(100) DEFAULT 'all',
+  favorite BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Content assets indexes
+CREATE INDEX IF NOT EXISTS idx_content_assets_user_id ON content_assets(user_id);
+CREATE INDEX IF NOT EXISTS idx_content_assets_type ON content_assets(type);
+CREATE INDEX IF NOT EXISTS idx_content_assets_folder ON content_assets(folder);
+CREATE INDEX IF NOT EXISTS idx_content_assets_favorite ON content_assets(favorite);
+CREATE INDEX IF NOT EXISTS idx_content_assets_created_at ON content_assets(created_at DESC);
+
 -- Analytics indexes
 CREATE INDEX IF NOT EXISTS idx_analytics_user_id ON analytics(user_id);
 CREATE INDEX IF NOT EXISTS idx_analytics_event_type ON analytics(event_type);

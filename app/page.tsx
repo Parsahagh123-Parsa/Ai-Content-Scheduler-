@@ -20,10 +20,11 @@ import NotificationSystem from '../components/NotificationSystem';
 import SimplePostingWorkflow from '../components/SimplePostingWorkflow';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import TeamWorkspace from '../components/TeamWorkspace';
+import ContentLibrary from '../components/ContentLibrary';
 
 // Define the type for tab navigation - this ensures type safety
 // Each tab represents a different feature/section of the app
-type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
+type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'library' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
 
 /**
  * Main Home Component - The central hub of the AI Content Scheduler application
@@ -53,8 +54,9 @@ export default function Home() {
     { id: 'post', label: 'Simple Post', icon: '📱' },                // Simplified posting workflow (Main feature)
     { id: 'generator', label: 'Content Generator', icon: '🚀' },      // AI-powered content creation
     { id: 'optimizer', label: 'Post Optimizer', icon: '🎯' },        // Post performance optimization
-    { id: 'analytics', label: 'Analytics', icon: '📊' },             // Advanced analytics dashboard (NEW)
-    { id: 'team', label: 'Team', icon: '👥' },                       // Team workspace & collaboration (NEW)
+    { id: 'analytics', label: 'Analytics', icon: '📊' },             // Advanced analytics dashboard
+    { id: 'team', label: 'Team', icon: '👥' },                       // Team workspace & collaboration
+    { id: 'library', label: 'Library', icon: '📚' },                  // Content library & asset management (NEW)
     { id: 'coach', label: 'AI Coach', icon: '🤖' },                  // AI coaching and guidance
     { id: 'dashboard', label: '3D Dashboard', icon: '🌌' },          // 3D visualization dashboard
     { id: 'comprehensive', label: 'AI Studio', icon: '🎬' },         // Comprehensive content creation suite
@@ -91,6 +93,9 @@ export default function Home() {
       case 'team':
         // Team workspace with collaboration features
         return <TeamWorkspace />;
+      case 'library':
+        // Content library with asset management
+        return <ContentLibrary />;
       case 'coach':
         // AI coaching chat interface for guidance
         return <AICoachingChat />;
