@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Content Scheduler",
-  description: "Schedule and manage AI-generated content for your social media platforms",
+  title: "ViralFlow - AI-Powered Content Creation Platform",
+  description: "Transform into an influencer with AI-powered content creation, smart scheduling, and automated posting. The complete platform for content creators.",
 };
 
 export default function RootLayout({

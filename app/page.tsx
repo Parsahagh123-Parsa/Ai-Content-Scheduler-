@@ -16,10 +16,14 @@ import SponsorshipProposals from '../components/SponsorshipProposals';
 import CreatorFeed from '../components/CreatorFeed';
 import AISupportChatbot from '../components/AISupportChatbot';
 import CreatorMarketplace from '../components/CreatorMarketplace';
+import NotificationSystem from '../components/NotificationSystem';
+import SimplePostingWorkflow from '../components/SimplePostingWorkflow';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
+import TeamWorkspace from '../components/TeamWorkspace';
 
 // Define the type for tab navigation - this ensures type safety
 // Each tab represents a different feature/section of the app
-type TabType = 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
+type TabType = 'post' | 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'analytics' | 'team' | 'pricing' | 'comprehensive' | 'sponsorship' | 'community' | 'support' | 'marketplace';
 
 /**
  * Main Home Component - The central hub of the AI Content Scheduler application
@@ -35,8 +39,8 @@ type TabType = 'generator' | 'optimizer' | 'coach' | 'dashboard' | 'pricing' | '
  */
 export default function Home() {
   // State for managing which tab is currently active
-  // 'generator' is the default tab when the app loads
-  const [activeTab, setActiveTab] = useState<TabType>('generator');
+  // 'post' is the default tab when the app loads (simplified posting workflow)
+  const [activeTab, setActiveTab] = useState<TabType>('post');
   
   // State for storing content plans data (used by the 3D dashboard)
   // This will be populated when users generate content plans
@@ -46,8 +50,11 @@ export default function Home() {
   // Each tab has an ID, display label, and emoji icon
   // The order here determines the order they appear in the navigation
   const tabs = [
+    { id: 'post', label: 'Simple Post', icon: '📱' },                // Simplified posting workflow (Main feature)
     { id: 'generator', label: 'Content Generator', icon: '🚀' },      // AI-powered content creation
     { id: 'optimizer', label: 'Post Optimizer', icon: '🎯' },        // Post performance optimization
+    { id: 'analytics', label: 'Analytics', icon: '📊' },             // Advanced analytics dashboard (NEW)
+    { id: 'team', label: 'Team', icon: '👥' },                       // Team workspace & collaboration (NEW)
     { id: 'coach', label: 'AI Coach', icon: '🤖' },                  // AI coaching and guidance
     { id: 'dashboard', label: '3D Dashboard', icon: '🌌' },          // 3D visualization dashboard
     { id: 'comprehensive', label: 'AI Studio', icon: '🎬' },         // Comprehensive content creation suite
@@ -69,12 +76,21 @@ export default function Home() {
    */
   const renderActiveTab = () => {
     switch (activeTab) {
+      case 'post':
+        // Simplified posting workflow - main feature for easy posting
+        return <SimplePostingWorkflow userId="demo-user" />;
       case 'generator':
         // AI-powered content generation form with advanced features
         return <EnhancedContentForm />;
       case 'optimizer':
         // Smart post optimization with virality scoring
         return <SmartPostOptimizer />;
+      case 'analytics':
+        // Advanced analytics dashboard with comprehensive metrics
+        return <AnalyticsDashboard />;
+      case 'team':
+        // Team workspace with collaboration features
+        return <TeamWorkspace />;
       case 'coach':
         // AI coaching chat interface for guidance
         return <AICoachingChat />;
@@ -123,15 +139,18 @@ export default function Home() {
             {/* Left side - App branding */}
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">
-                🚀 AI Content Scheduler
+                🚀 ViralFlow
               </h1>
               <p className="text-blue-200">
-                Your AI-powered content creation platform
+                Your AI-powered content creation & influencer platform
               </p>
             </div>
             
-            {/* Right side - User profile info (mock data for demo) */}
+            {/* Right side - User profile info and notifications */}
             <div className="flex items-center space-x-4">
+              {/* Notification System */}
+              <NotificationSystem userId="demo-user" />
+              
               <div className="text-right">
                 <p className="text-white font-bold">Level 3 Creator</p>  {/* User level */}
                 <p className="text-blue-200 text-sm">1,250 XP</p>        {/* Experience points */}
